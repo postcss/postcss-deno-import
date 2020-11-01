@@ -11,7 +11,7 @@ await convert({
   output: "deno",
   depsFiles: {
     "": "deps.js",
-    "test": "test/deps.js",
+    // "test": "test/deps.js",
   },
   copy: {
     "deps.js": "deps.js",

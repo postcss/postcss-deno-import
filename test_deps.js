@@ -3,6 +3,9 @@ export * from "../deps.js";
 
 export { readFileSync } from "https://deno.land/std/node/fs.ts";
 
-export function test(name, fn) {
-  Deno.test(name, () => fn(asserts));
+const t = { ...asserts};
+t.is = asserts.equal;
+
+export function test(name, fn, ...args) {
+  Deno.test(name, () => fn(t, ...args));
 }

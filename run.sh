@@ -18,4 +18,4 @@ deno fmt deno
 
 # Run the tests
 cd deno
-# deno test --unstable --allow-read test/*
+# deno test --unstable --allow-read --allow-write test/import.js
