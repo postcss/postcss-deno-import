@@ -8,41 +8,62 @@ export * as path from "https://deno.land/std/node/path.ts";
 export * as fs from "https://deno.land/std/node/fs.ts";
 export { default as postcss } from "https://deno.land/x/postcss/mod.js";
 
-export function resolve(file, options, cb) {
-  if (typeof options === "function") {
-    cb = options;
-    options = {};
-  } else if (!options) {
-    options = {};
+export function resolve(id, options, cb) {
+  options.paths = options.paths || [];
+
+  const file = checkFile(id, options.basedir);
+
+  if (file) {
+    return cb(null, file);
   }
 
-  let result;
+  for (const path of options.paths) {
+    const file = checkFile(id, path);
 
-  if (options.paths && options.paths.length) {
-    result = join(options.paths[0], file);
-  } else if (options.basedir) {
-    result = join(options.basedir, file);
-  } else {
-    result = join(Deno.cwd(), file);
-  }
-
-  if (!extname(result)) {
-    try {
-      const info = Deno.statSync(result);
-
-      if (info.isDirectory) {
-        result = join(result, "index.css");
-      }
-    } catch (err) {
-      result = `${result}.css`;
+    if (file) {
+      return cb(null, file);
     }
   }
 
-  if (!cb) {
-    return Promise.resolve(result);
+  for (const moduleDir of options.moduleDirectory) {
+    const file = checkFile(id, join(options.basedir, moduleDir));
+
+    if (file) {
+      return cb(null, file);
+    }
   }
 
-  cb(null, result);
+  cb(`${id} not resolved`);
+}
+
+function checkFile(id, directory) {
+  let file = join(directory, id);
+
+  try {
+    const info = Deno.statSync(file);
+
+    if (info.isDirectory) {
+      file = join(file, "index.css");
+    } else {
+      return file;
+    }
+  } catch (err) {
+    if (extname(file)) {
+      return false;
+    }
+  }
+
+  file = `${file}.css`;
+
+  try {
+    const info = Deno.statSync(file);
+
+    if (info.isFile) {
+      return file;
+    }
+  } catch (err) {
+    return false;
+  }
 }
 
 const cache = new Map();

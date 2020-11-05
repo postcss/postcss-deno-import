@@ -9,18 +9,16 @@ import processContent from "./lib/process-content.js";
 import parseStatements from "./lib/parse-statements.js";
 
 function AtImport(options) {
-  options = Object.assign(
-    {
-      root: Deno.cwd(),
-      path: [],
-      skipDuplicates: true,
-      resolve: resolveId,
-      load: loadContent,
-      plugins: [],
-      addModulesDirectories: [],
-    },
-    options,
-  );
+  options = {
+    root: Deno.cwd(),
+    path: [],
+    skipDuplicates: true,
+    resolve: resolveId,
+    load: loadContent,
+    plugins: [],
+    addModulesDirectories: [],
+    ...options,
+  };
 
   options.root = path.resolve(options.root);
 
@@ -58,7 +56,7 @@ function AtImport(options) {
           if (index === 0) return;
 
           if (stmt.parent) {
-            const before = stmt.parent.node.raws.before;
+            const { before } = stmt.parent.node.raws;
             if (stmt.type === "nodes") stmt.nodes[0].raws.before = before;
             else stmt.node.raws.before = before;
           } else if (stmt.type === "nodes") {
@@ -75,8 +73,8 @@ function AtImport(options) {
           } else if (stmt.type === "media") {
             stmt.node.params = stmt.media.join(", ");
           } else {
-            const nodes = stmt.nodes;
-            const parent = nodes[0].parent;
+            const { nodes } = stmt;
+            const { parent } = nodes[0];
             const mediaNode = atRule({
               name: "media",
               params: stmt.media.join(", "),
@@ -202,7 +200,7 @@ function AtImport(options) {
               result.messages.push({
                 type: "dependency",
                 plugin: "postcss-import",
-                file: file,
+                file,
                 parent: sourceFile,
               });
             });
@@ -223,7 +221,7 @@ function AtImport(options) {
 
       function loadImportContent(result, stmt, filename, options, state) {
         const atRule = stmt.node;
-        const media = stmt.media;
+        const { media } = stmt;
         if (options.skipDuplicates) {
           // skip files already imported at the same scope
           if (

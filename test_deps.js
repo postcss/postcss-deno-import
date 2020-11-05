@@ -3,9 +3,14 @@ export * from "../deps.js";
 
 export { readFileSync } from "https://deno.land/std/node/fs.ts";
 
-const t = { ...asserts};
+const t = { ...asserts };
 t.is = asserts.equal;
 
 export function test(name, fn, ...args) {
-  Deno.test(name, () => fn(t, ...args));
+  Deno.test({
+    fn: () => fn(t, ...args),
+    name,
+    sanitizeOps: true,
+    sanitizeResources: true,
+  });
 }

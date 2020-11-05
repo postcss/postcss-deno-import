@@ -15,7 +15,7 @@ export default function (id, base, options) {
   const resolveOpts = {
     basedir: base,
     moduleDirectory: moduleDirectories.concat(options.addModulesDirectories),
-    paths: paths,
+    paths,
     extensions: [".css"],
     packageFilter: function processPackage(pkg) {
       if (pkg.style) pkg.main = pkg.style;

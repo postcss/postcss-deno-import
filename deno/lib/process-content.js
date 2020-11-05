@@ -5,7 +5,7 @@ import { path } from "../deps.js";
 import { postcss } from "../deps.js";
 
 export default function processContent(result, content, filename, options) {
-  const plugins = options.plugins;
+  const { plugins } = options;
   const ext = path.extname(filename);
 
   const parserList = [];

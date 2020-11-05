@@ -40,17 +40,51 @@ await convert({
     "": "mod.js",
   },
   beforeConvert(src) {
-    let file = "lib/process-content.js";
-    let code = src.get(file);
-    code = code.replace(`// placeholder tooling\nlet sugarss`, "");
-    code = code.replace(
-      `if (!sugarss) {\n      try {\n        sugarss = require("sugarss")\n      } catch (e) {\n        // Ignore\n      }\n    }\n    if (sugarss) return runPostcss(content, filename, plugins, [sugarss])`,
-      `throw new Error("SugarSS not supported");`,
-    );
-    src.set(file, code);
+    rename(src, "index.js", "mod.js");
 
-    code = src.get("index.js");
-    src.set("mod.js", code);
-    src.delete("index.js");
+    replace(
+      src,
+      "lib/process-content.js",
+      (code) =>
+        code.replace(`// placeholder tooling\nlet sugarss`, "")
+          .replace(
+            `if (!sugarss) {\n      try {\n        sugarss = require("sugarss")\n      } catch {} // Ignore\n    }\n    if (sugarss) return runPostcss(content, filename, plugins, [sugarss])`,
+            `throw new Error("SugarSS not supported");`,
+          ),
+    );
+
+    replace(
+      src,
+      "test/import.js",
+      (code) =>
+        code.replace(
+          `process.platform === "win32"`,
+          `Deno.build.os === "windows"`,
+        ),
+    );
+
+    for (const filename of src.keys()) {
+      if (filename.match(/test\/[\w-]+\.js/)) {
+        rename(src, filename, filename.replace(".js", ".test.js"));
+      }
+    }
   },
 });
+
+function rename(src, from, to) {
+  if (!src.has(from)) {
+    return;
+  }
+
+  src.set(to, src.get(from));
+  src.delete(from);
+}
+
+function replace(src, file, cb) {
+  if (!src.has(file)) {
+    return;
+  }
+
+  const code = cb(src.get(file));
+  src.set(file, code);
+}

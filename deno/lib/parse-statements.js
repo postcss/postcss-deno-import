@@ -2,7 +2,7 @@
 import { valueParser } from "../deps.js";
 
 // extended tooling
-const stringify = valueParser.stringify;
+const { stringify } = valueParser;
 
 function split(params, start) {
   const list = [];
@@ -33,7 +33,7 @@ export default function (result, styles) {
       if (nodes.length) {
         statements.push({
           type: "nodes",
-          nodes: nodes,
+          nodes,
           media: [],
         });
         nodes = [];
@@ -45,7 +45,7 @@ export default function (result, styles) {
   if (nodes.length) {
     statements.push({
       type: "nodes",
-      nodes: nodes,
+      nodes,
       media: [],
     });
   }
@@ -74,7 +74,8 @@ function parseImport(result, atRule) {
           "@import must precede all other statements (besides @charset)",
           { node: atRule },
         );
-      } else prev = getPrev(prev);
+      }
+      prev = getPrev(prev);
     } while (prev);
   }
 
