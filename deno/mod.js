@@ -1,7 +1,4 @@
-// builtin tooling
-import { path } from "./deps.js";
-
-// internal tooling
+import { path } from "./lib/deps.js";
 import joinMedia from "./lib/join-media.js";
 import resolveId from "./lib/resolve-id.js";
 import loadContent from "./lib/load-content.js";

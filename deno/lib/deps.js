@@ -43,7 +43,7 @@ function checkFile(id, directory) {
     const info = Deno.statSync(file);
 
     if (info.isDirectory) {
-      file = join(file, "index.css");
+      file = join(file, "index");
     } else {
       return file;
     }

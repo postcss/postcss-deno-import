@@ -1,5 +1,4 @@
-// external tooling
-import { resolve } from "../deps.js";
+import { resolve } from "./deps.js";
 
 const moduleDirectories = ["web_modules", "node_modules"];
 

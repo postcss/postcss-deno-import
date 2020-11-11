@@ -1,5 +1,4 @@
-// external tooling
-import { valueParser } from "../deps.js";
+import { valueParser } from "./deps.js";
 
 // extended tooling
 const { stringify } = valueParser;
