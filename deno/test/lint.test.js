@@ -50,7 +50,7 @@ Deno.test("should not warn if comments before @import", () => {
     });
 });
 
-Deno.test("should warn if something before comments", (t) => {
+Deno.test("should warn if something before comments", () => {
   return processor
     .process(`a{} /* skipped comment */ @import "";`, { from: undefined })
     .then((result) => {

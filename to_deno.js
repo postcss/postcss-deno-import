@@ -16,6 +16,9 @@ await convert({
     "test": "test",
     "postcss-import/test/fixtures": "test/fixtures",
     "postcss-import/test/sourcemap": "test/sourcemap",
+    "postcss-import/README.md": "README.md",
+    "postcss-import/CHANGELOG.md": "CHANGELOG.md",
+    "postcss-import/LICENSE": "LICENSE",
   },
   modules: {
     "": "mod.js",
