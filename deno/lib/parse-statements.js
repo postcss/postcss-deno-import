@@ -1,3 +1,4 @@
+// external tooling
 import { valueParser } from "./deps.js";
 
 // extended tooling
@@ -26,6 +27,7 @@ export default function (result, styles) {
     if (node.type === "atrule") {
       if (node.name === "import") stmt = parseImport(result, node);
       else if (node.name === "media") stmt = parseMedia(result, node);
+      else if (node.name === "charset") stmt = parseCharset(result, node);
     }
 
     if (stmt) {
@@ -61,20 +63,34 @@ function parseMedia(result, atRule) {
   };
 }
 
+function parseCharset(result, atRule) {
+  if (atRule.prev()) {
+    return result.warn("@charset must precede all other statements", {
+      node: atRule,
+    });
+  }
+  return {
+    type: "charset",
+    node: atRule,
+    media: [],
+  };
+}
+
 function parseImport(result, atRule) {
-  let prev = getPrev(atRule);
+  let prev = atRule.prev();
   if (prev) {
     do {
       if (
-        prev.type !== "atrule" ||
-        (prev.name !== "import" && prev.name !== "charset")
+        prev.type !== "comment" &&
+        (prev.type !== "atrule" ||
+          (prev.name !== "import" && prev.name !== "charset"))
       ) {
         return result.warn(
           "@import must precede all other statements (besides @charset)",
           { node: atRule },
         );
       }
-      prev = getPrev(prev);
+      prev = prev.prev();
     } while (prev);
   }
 
@@ -124,12 +140,4 @@ function parseImport(result, atRule) {
   }
 
   return stmt;
-}
-
-function getPrev(item) {
-  let prev = item.prev();
-  while (prev && prev.type === "comment") {
-    prev = prev.prev();
-  }
-  return prev;
 }

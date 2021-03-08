@@ -1,4 +1,7 @@
+// builtin tooling
 import { path } from "./deps.js";
+
+// external tooling
 import { postcss } from "./deps.js";
 
 export default function processContent(result, content, filename, options) {

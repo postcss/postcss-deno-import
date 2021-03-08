@@ -1,4 +1,7 @@
+// builtin tooling
 import { path } from "./lib/deps.js";
+
+// internal tooling
 import joinMedia from "./lib/join-media.js";
 import resolveId from "./lib/resolve-id.js";
 import loadContent from "./lib/load-content.js";
@@ -103,10 +106,7 @@ function AtImport(options) {
 
         // Strip additional statements.
         bundle.forEach((stmt) => {
-          if (stmt.type === "import") {
-            stmt.node.parent = undefined;
-            styles.append(stmt.node);
-          } else if (stmt.type === "media") {
+          if (["charset", "import", "media"].includes(stmt.type)) {
             stmt.node.parent = undefined;
             styles.append(stmt.node);
           } else if (stmt.type === "nodes") {
@@ -146,15 +146,33 @@ function AtImport(options) {
             }, Promise.resolve());
           })
           .then(() => {
+            let charset;
             const imports = [];
             const bundle = [];
 
+            function handleCharset(stmt) {
+              if (!charset) charset = stmt;
+              // charsets aren't case-sensitive, so convert to lower case to compare
+              else if (
+                stmt.node.params.toLowerCase() !==
+                  charset.node.params.toLowerCase()
+              ) {
+                throw new Error(
+                  `Incompatable @charset statements:
+  ${stmt.node.params} specified in ${stmt.node.source.input.file}
+  ${charset.node.params} specified in ${charset.node.source.input.file}`,
+                );
+              }
+            }
+
             // squash statements and their children
             statements.forEach((stmt) => {
-              if (stmt.type === "import") {
+              if (stmt.type === "charset") handleCharset(stmt);
+              else if (stmt.type === "import") {
                 if (stmt.children) {
                   stmt.children.forEach((child, index) => {
                     if (child.type === "import") imports.push(child);
+                    else if (child.type === "charset") handleCharset(child);
                     else bundle.push(child);
                     // For better output
                     if (index === 0) child.parent = stmt;
@@ -165,7 +183,9 @@ function AtImport(options) {
               }
             });
 
-            return imports.concat(bundle);
+            return charset
+              ? [charset, ...imports.concat(bundle)]
+              : imports.concat(bundle);
           });
       }
 
