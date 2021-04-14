@@ -67,7 +67,7 @@ function AtImport(options) {
 
       function applyMedia(bundle) {
         bundle.forEach((stmt) => {
-          if (!stmt.media.length) return;
+          if (!stmt.media.length || stmt.type === "charset") return;
           if (stmt.type === "import") {
             stmt.node.params = `${stmt.fullUri} ${stmt.media.join(", ")}`;
           } else if (stmt.type === "media") {
