@@ -3,7 +3,7 @@ import {
   join,
   resolve as pathResolve,
 } from "https://deno.land/std@0.77.0/path/mod.ts";
-export { default as valueParser } from "https://dev.jspm.io/postcss-value-parser@4.1.0";
+export { default as valueParser } from "https://deno.land/x/postcss_value_parser@v4.1.0/mod.js";
 export * as path from "https://deno.land/std@0.77.0/node/path.ts";
 export * as fs from "https://deno.land/std@0.77.0/node/fs.ts";
 export { default as postcss } from "https://deno.land/x/postcss/mod.js";
