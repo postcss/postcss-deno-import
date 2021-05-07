@@ -1,5 +1,4 @@
-import { postcss } from "../lib/deps.js";
-import { assertEquals } from "./deps.js";
+import { assertEquals, postcss } from "./deps.js";
 import atImport from "../mod.js";
 import checkFixture from "./check-fixture.js";
 

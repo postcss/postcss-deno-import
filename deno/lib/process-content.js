@@ -1,10 +1,13 @@
 // builtin tooling
 import { path } from "./deps.js";
 
-// external tooling
-import { postcss } from "./deps.js";
-
-export default function processContent(result, content, filename, options) {
+export default function processContent(
+  result,
+  content,
+  filename,
+  options,
+  postcss,
+) {
   const { plugins } = options;
   const ext = path.extname(filename);
 
@@ -25,10 +28,10 @@ export default function processContent(result, content, filename, options) {
   // Try the default as a last resort:
   parserList.push(null);
 
-  return runPostcss(content, filename, plugins, parserList);
+  return runPostcss(postcss, content, filename, plugins, parserList);
 }
 
-function runPostcss(content, filename, plugins, parsers, index) {
+function runPostcss(postcss, content, filename, plugins, parsers, index) {
   if (!index) index = 0;
   return postcss(plugins)
     .process(content, {
@@ -40,6 +43,6 @@ function runPostcss(content, filename, plugins, parsers, index) {
       index++;
       // If there are no parsers left, throw it
       if (index === parsers.length) throw err;
-      return runPostcss(content, filename, plugins, parsers, index);
+      return runPostcss(postcss, content, filename, plugins, parsers, index);
     });
 }

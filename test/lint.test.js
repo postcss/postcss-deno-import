@@ -1,5 +1,4 @@
-import { assertEquals } from "./deps.js";
-import { postcss } from "../lib/deps.js";
+import { assertEquals, postcss } from "./deps.js";
 import atImport from "../mod.js";
 
 const processor = postcss().use(atImport());

@@ -30,9 +30,22 @@ await convert({
       "lib/process-content.js",
       (code) =>
         code.replace(`// placeholder tooling\nlet sugarss`, "")
-          .replace(
-            `if (!sugarss) {\n      try {\n        sugarss = require("sugarss")\n      } catch {} // Ignore\n    }\n    if (sugarss) return runPostcss(content, filename, plugins, [sugarss])`,
-            `throw new Error("SugarSS not supported");`,
+          .replace(`
+  // SugarSS support:
+  if (ext === ".sss") {
+    if (!sugarss) {
+      try {
+        sugarss = require("sugarss")
+      } catch {} // Ignore
+    }
+    if (sugarss)
+      return runPostcss(postcss, content, filename, plugins, [sugarss])
+  }`,
+            `
+  // SugarSS support:
+  if (ext === ".sss") {
+    throw new Error("SugarSS not supported")
+  }`,
           ),
     );
 

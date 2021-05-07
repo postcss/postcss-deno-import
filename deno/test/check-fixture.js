@@ -1,5 +1,5 @@
-import { assertEquals } from "./deps.js";
-import { fs, postcss } from "../lib/deps.js";
+import { assertEquals, postcss } from "./deps.js";
+import { fs } from "../lib/deps.js";
 import atImport from "../mod.js";
 
 function read(name, ext) {

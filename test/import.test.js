@@ -1,5 +1,5 @@
-import { fs, path, postcss } from "../lib/deps.js";
-import { assertEquals, assertThrowsAsync } from "./deps.js";
+import { fs, path } from "../lib/deps.js";
+import { assertEquals, assertThrowsAsync, postcss } from "./deps.js";
 import atImport from "../mod.js";
 import checkFixture from "./check-fixture.js";
 
