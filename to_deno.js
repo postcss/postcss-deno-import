@@ -1,6 +1,6 @@
 import { convert } from "https://deno.land/x/nodedeno@v0.2.7/mod.js";
 
-//Convert the code
+// Convert the code
 await convert({
   src: "postcss-import",
   input: [
@@ -23,14 +23,15 @@ await convert({
   modules: {
     "": "mod.js",
   },
-  beforeConvert(src, { rename, replace }) {
+  beforeConvert(_src, { rename, replace }) {
     rename("index.js", "mod.js");
 
     replace(
       "lib/process-content.js",
       (code) =>
         code.replace(`// placeholder tooling\nlet sugarss`, "")
-          .replace(`
+          .replace(
+            `
   // SugarSS support:
   if (ext === ".sss") {
     if (!sugarss) {

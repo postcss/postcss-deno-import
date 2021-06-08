@@ -1,6 +1,7 @@
 # Postcss-import for Deno
 
-Scripts to transform the source code of postcss-import plugin for Deno compatibility.
+Scripts to transform the source code of postcss-import plugin for Deno
+compatibility.
 
 ```sh
 sh run.sh
