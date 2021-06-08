@@ -1,4 +1,4 @@
-import { convert } from "https://deno.land/x/nodedeno@v0.2.7/mod.js";
+import { convert } from "https://deno.land/x/nodedeno@v0.2.8/mod.js";
 
 // Convert the code
 await convert({
