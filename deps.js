@@ -2,10 +2,10 @@ import {
   extname,
   join,
   resolve as pathResolve,
-} from "https://deno.land/std@0.95.0/path/mod.ts";
+} from "https://deno.land/std@0.98.0/path/mod.ts";
 export { default as valueParser } from "https://deno.land/x/postcss_value_parser@v4.1.0/mod.js";
-export * as path from "https://deno.land/std@0.95.0/node/path.ts";
-export * as fs from "https://deno.land/std@0.95.0/node/fs.ts";
+export * as path from "https://deno.land/std@0.98.0/node/path.ts";
+export * as fs from "https://deno.land/std@0.98.0/node/fs.ts";
 
 export function resolve(id, options, cb) {
   options.paths = options.paths || [];

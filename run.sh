@@ -18,4 +18,4 @@ cp postcss-import/LICENSE deno/
 
 # Run the tests
 cd deno
-deno test --unstable --allow-read
+deno test --unstable --allow-read --allow-env
