@@ -46,7 +46,7 @@ function checkFile(id, directory) {
     } else {
       return file;
     }
-  } catch (err) {
+  } catch {
     if (extname(file)) {
       return false;
     }
@@ -60,7 +60,7 @@ function checkFile(id, directory) {
     if (info.isFile) {
       return file;
     }
-  } catch (err) {
+  } catch {
     return false;
   }
 }
@@ -86,7 +86,7 @@ export async function readCache(filename) {
     });
 
     return content;
-  } catch (err) {
+  } catch {
     return Promise.reject(new Error(filename));
   }
 }
